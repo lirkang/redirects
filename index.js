@@ -4,15 +4,21 @@
  * @Filepath redirect/index.js
  */
 
-// @ts-check
-
 /** @typedef {{match: string, selectors: { removes: Array<string>, hides: Array<string>, parents: Array<string>, css: { [k: string]: Array<string> } }, onload?: () => void, runner?: () => void }} Site  */
 
 (async function bootstrap() {
+  /**
+   *
+   * @param {MouseEvent} event
+   */
   function csdnEventHandler(event) {
     event.cancelBubble = true;
   }
 
+  /**
+   *
+   * @param {MouseEvent} event
+   */
   function wxEventHandler(event) {
     event.cancelBubble = true;
 
@@ -161,7 +167,7 @@
             ['width', '1200px', 'box-sizing', 'border-box'],
           '.AnswerItem-authorInfo': ['max-width', '100%'],
           '.Topstory-container, .Profile-main, .QuestionWaiting, .QuestionWaiting-mainColumn, .Question-main, .AuthorInfo-badgeText, .Search-container, .SearchMain':
-            ['margin-left', 0, 'margin-right', 0, 'justify-content', 'center', 'width', 'auto'],
+            ['margin-left', '0', 'margin-right', '0', 'justify-content', 'center', 'width', 'auto'],
         },
         hides: [],
         removes: [
@@ -316,23 +322,17 @@
      * @private
      */
     listen() {
-      const onChange = function onChange() {
+      const onChange = () => {
         this.removes(this.selectors?.selectors?.removes ?? []);
         this.hides(this.selectors?.selectors?.hides ?? []);
         this.removeParents(this.selectors?.selectors?.parents ?? []);
         this.setCss(this.selectors?.selectors?.css ?? {});
         this.selectors?.runner?.();
-      }.bind(this);
+      };
 
       onChange();
 
-      new MutationObserver(() => {
-        this.removes(this.selectors?.selectors?.removes ?? []);
-        this.hides(this.selectors?.selectors?.hides ?? []);
-        this.removeParents(this.selectors?.selectors?.parents ?? []);
-        this.setCss(this.selectors?.selectors?.css ?? {});
-        this.selectors?.runner?.();
-      }).observe(document.body, { subtree: true, childList: true });
+      new MutationObserver(onChange.bind(this)).observe(document.body, { subtree: true, childList: true });
     }
   }
 
