@@ -7,12 +7,12 @@
   "author": "human",
   "offline_enabled": true,
   "background": {
-    "service_worker": "./scripts/background.js",
+    "service_worker": "./service.js",
     "type": "module"
   },
   "host_permissions": ["*://*/*"],
   "permissions": ["storage"],
-  "content_scripts": [{ "matches": ["https://*/*"], "js": ["./scripts/jquery.js", "./index.js"] }],
+  "content_scripts": [{ "matches": ["https://*/*"], "js": ["./jquery.js", "./index.js"] }],
   "action": {
     "default_title": "移除重定向"
   }

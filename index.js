@@ -4,7 +4,7 @@
  * @Filepath redirect/index.js
  */
 
-/** @typedef {{match: string, selectors: { removes: Array<string>, hides: Array<string>, parents: Array<string>, css: { [k: string]: Array<string> } }, onload?: () => void, runner?: () => void }} Site  */
+/** @typedef {{match: string | Array<string>, selectors: { removes: Array<string>, hides: Array<string>, parents: Array<string>, css: { [k: string]: Array<string> } }, onload?: () => void, runner?: () => void }} Site  */
 
 (async function bootstrap() {
   /**
@@ -60,7 +60,7 @@
       },
     },
     {
-      match: 'https://blog.csdn.net',
+      match: ['https://blog.csdn.net', 'https://csdnnews.blog.csdn.net', 'https://www.csdn.net'],
       runner() {
         $('#article_content a').each(function () {
           $(this).attr('target', '_blank');
@@ -79,6 +79,7 @@
           '.blog-footer-bottom',
           '#recommendNps',
           '#blogColumnPayAdvert',
+          '#blogExtensionBox',
           '#treeSkill',
           '.recommend-box',
           '.left-toolbox',
@@ -105,8 +106,9 @@
       selectors: {
         css: {
           '.main-area, .course-content, .hot-list': ['max-width', '100%', 'width', 'auto'],
-          '.timeline-entry-list, .stream': ['margin', '0', 'width', 'auto'],
           '.main': ['justify-content', 'center'],
+          '.timeline-entry-list, .stream': ['margin', '0', 'width', 'auto'],
+          '#comment-box': ['width', '100%', 'margin-left', '0', 'margin-right', '0'],
         },
         hides: [],
         removes: [
@@ -123,6 +125,7 @@
           '.special-activity',
           '.download-icon',
           '.extension-icon',
+          '.main-nav-list',
         ],
         parents: ['.advertisement', '.juejin-ab-test-wrap', '.dock-nav'],
       },
@@ -230,6 +233,7 @@
           '.floor-card',
           '.palette-button-wrap > *:not(.top-btn)',
           '.bili-live-card',
+          '.video-page-special-card-small',
           '.right-entry-item:has(.right-entry--vip)',
           '.right-entry-item:has(.header-upload-entry)',
           '.left-entry .v-popover-wrap:not(:first-child)',
@@ -268,7 +272,9 @@
      * @private
      */
     validate(url) {
-      const site = sites.find(({ match }) => url.startsWith(match));
+      const site = sites.find(({ match }) =>
+        Array.isArray(match) ? match.some(link => url.startsWith(link)) : url.startsWith(match)
+      );
 
       return site ? [true, site] : [false, null];
     }
