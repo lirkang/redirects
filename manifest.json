@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "redirect remover",
+  "version": "0.0.0",
+  "description": "移除部分网站链接的重定向, 修改部分页面样式和移除广告",
+  "homepage_url": "https://github.com/lirkang",
+  "author": "human",
+  "offline_enabled": true,
+  "background": {
+    "service_worker": "./scripts/background.js",
+    "type": "module"
+  },
+  "host_permissions": ["*://*/*"],
+  "permissions": ["storage"],
+  "content_scripts": [{ "matches": ["https://*/*"], "js": ["./scripts/jquery.js", "./index.js"] }],
+  "action": {
+    "default_title": "移除重定向"
+  }
+}

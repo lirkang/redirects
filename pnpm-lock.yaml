@@ -1,0 +1,31 @@
+lockfileVersion: 5.4
+
+specifiers:
+  '@types/jquery': ^3.5.14
+  chrome-types: ^0.1.152
+
+devDependencies:
+  '@types/jquery': registry.npmmirror.com/@types/jquery/3.5.14
+  chrome-types: registry.npmmirror.com/chrome-types/0.1.152
+
+packages:
+
+  registry.npmmirror.com/@types/jquery/3.5.14:
+    resolution: {integrity: sha512-X1gtMRMbziVQkErhTQmSe2jFwwENA/Zr+PprCkF63vFq+Yt5PZ4AlKqgmeNlwgn7dhsXEK888eIW2520EpC+xg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/jquery/-/jquery-3.5.14.tgz}
+    name: '@types/jquery'
+    version: 3.5.14
+    dependencies:
+      '@types/sizzle': registry.npmmirror.com/@types/sizzle/2.3.3
+    dev: true
+
+  registry.npmmirror.com/@types/sizzle/2.3.3:
+    resolution: {integrity: sha512-JYM8x9EGF163bEyhdJBpR2QX1R5naCJHC8ucJylJ3w9/CVBaskdQ8WqBf8MmQrd1kRvp/a4TS8HJ+bxzR7ZJYQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/sizzle/-/sizzle-2.3.3.tgz}
+    name: '@types/sizzle'
+    version: 2.3.3
+    dev: true
+
+  registry.npmmirror.com/chrome-types/0.1.152:
+    resolution: {integrity: sha512-rweFga+0oN/lgvxVVq5arOQqHVbjHJFkeqqs2eH6DF2dP6roXtVDNooiwkwnuQ8pkDT06rmYHhXWdISJaEcP5A==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/chrome-types/-/chrome-types-0.1.152.tgz}
+    name: chrome-types
+    version: 0.1.152
+    dev: true

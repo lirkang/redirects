@@ -1,0 +1,14 @@
+{
+  "name": "redirect",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jquery": "^3.5.14",
+    "chrome-types": "^0.1.152"
+  }
+}
