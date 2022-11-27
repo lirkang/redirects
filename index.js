@@ -6,7 +6,7 @@
 
 /** @typedef {{match: string | Array<string>, selectors: { removes: Array<string>, hides: Array<string>, parents: Array<string>, css: { [k: string]: Array<string> } }, onload?: () => void, runner?: () => void }} Site  */
 
-(async function bootstrap() {
+(async function bootstrap(window) {
   /**
    *
    * @param {MouseEvent} event
@@ -34,11 +34,30 @@
   /** @type {Array<Site>} */
   const sites = [
     {
+      match: ['https://www.bing.com'],
+      selectors: {
+        css: {},
+        hides: [],
+        parents: ['#b_opalpers', '#bingApp_area'],
+        removes: [
+          '.b_ad',
+          '.b_adTop',
+          'aside',
+          '#ev_talkbox_wrapper',
+          '#relatedSearchesLGWContainer',
+          'footer',
+          '.fabcolapse',
+          '.b_algo:has([data-partnertag])',
+          '.b_ans:has(.rqnaContainerwithfeedback )',
+        ],
+      },
+    },
+    {
       match: 'https://www.baidu.com',
       selectors: {
         css: {
           'a, a *': ['text-decoration', 'none'],
-          '.c-border': ['border-radius', '4px'],
+          '.c-border, .single-card-wrapper_2nlg9': ['border-radius', '4px'],
         },
         hides: [],
         removes: [
@@ -245,6 +264,51 @@
     },
   ];
 
+  const websites = [
+    {
+      title: 'Bing',
+      rules: /https:\/\/www\.bing\.com\/search\?(?<query>.*)/,
+      target: query => `https://www.bing.com/search?q=${query}`,
+      key: 'q',
+    },
+    {
+      title: 'Npm',
+      rules: /https:\/\/www\.npmjs\.com\/search\?(?<query>.*)/,
+      target: query => `https://www.npmjs.com/search?q=${query}`,
+      key: 'q',
+    },
+    {
+      title: 'Google翻译',
+      rules: /https:\/\/translate\.google\.com\/\?(?<query>.*)/,
+      target: query => `https://translate.google.com/?text=${query}`,
+      key: 'text',
+    },
+    {
+      title: '百度翻译',
+      rules: /https:\/\/fanyi\.baidu\.com\/translate\?(?<query>.*)/,
+      target: query => `https://fanyi.baidu.com/translate?query=${query}&lang=auto2zh`,
+      key: 'query',
+    },
+    {
+      title: '掘金',
+      rules: /https:\/\/juejin\.cn\/search\?(?<query>.*)/,
+      target: query => `https://juejin.cn/search?query=${query}`,
+      key: 'query',
+    },
+    {
+      title: '百度',
+      rules: /https:\/\/www\.baidu\.com\/s\?(?<query>.*)/,
+      target: query => `https://www.baidu.com/s?wd=${query}`,
+      key: 'wd',
+    },
+    {
+      title: 'Google',
+      rules: /https:\/\/www\.google\.com(?:\.hk)?\/search\?(?<query>.*)/,
+      target: query => `https://www.google.com/search?q=${query}`,
+      key: 'q',
+    },
+  ];
+
   class App {
     /** @type {Site | null} @private */
     selectors = null;
@@ -342,5 +406,106 @@
     }
   }
 
+  class Slider {
+    constructor() {}
+
+    append() {}
+  }
+
   new App(window.location.origin);
-})();
+  new Slider();
+
+  function getQuery() {
+    for (const { rules, key } of websites) {
+      const matches = window.location.href.match(rules);
+
+      if (matches === null) continue;
+
+      return function () {
+        return parse(window.location.href.match(rules)?.groups?.query ?? '')[key];
+      };
+    }
+
+    return () => '';
+  }
+
+  const query = getQuery();
+
+  /**
+   *
+   * @param {string} string
+   * @returns {Record<string, string>}
+   */
+  function parse(string) {
+    return Object.fromEntries(string.split('&').map(item => item.split('=')));
+  }
+
+  const el = $('<div></div>');
+
+  websites.forEach(({ title, target, rules, key }, index) => {
+    const childEl = $('<a></a>');
+    const iconEl = $('<span></span>');
+    const titleEl = $('<span></span>');
+
+    childEl.on('mouseover', function () {
+      this.href = websites[index].target(query());
+    });
+
+    iconEl
+      .text(title[0])
+      .css('font-weight', 'bold')
+      .css('font-size', 32)
+      .css('transition', 'all 0.3s')
+      .on('mouseover', function () {
+        $(this).css('transform', 'scale(1.2)');
+      })
+      .on('mouseout', function () {
+        $(this).css('transform', 'scale(1)');
+      });
+
+    titleEl.text(title).css('font-weight', 'medium');
+
+    childEl
+      .attr('target', '_blank')
+      .css('display', 'flex')
+      .css('justify-content', 'center')
+      .css('flex-direction', 'column')
+      .css('gap', 2)
+      .css('text-align', 'center');
+
+    childEl.append(iconEl).append(titleEl);
+    el.append(childEl);
+  });
+
+  el.css('position', 'fixed')
+    .css('left', 0)
+    .css('top', 0)
+    .css('bottom', 0)
+    .css('width', 90)
+    .css('transition', 'all 0.3s')
+    .css('transform', 'translateX(-75%)')
+    .css('z-index', 99999)
+    .css('gap', 8)
+    .css('display', 'flex')
+    .css('flex-direction', 'column')
+    .css('align-items', 'center')
+    .css('border-radius', 8)
+    .css('box-shadow', '0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)')
+    .css('backdrop-filter', 'blur(20px)')
+    .css('padding', '24px 0')
+    .css('overflow', 'auto')
+    .addClass('extension__wrapper')
+    .on('mouseover', function () {
+      $(this).css('transform', 'translateX(-5%)');
+    })
+    .on('mouseout', function () {
+      $(this).css('transform', 'translateX(-75%)');
+    });
+
+  const style = $('<style></style>');
+
+  style.text('.extension__wrapper::-webkit-scrollbar {display: none;}');
+
+  $('head').append(style);
+  $('body').append(el);
+})(window);

@@ -6,7 +6,7 @@
     "skipLibCheck": true,
     "moduleDetection": "force",
     "types": ["chrome-types", "@types/jquery"],
-    "lib": ["ES2015", "DOM"],
+    "lib": ["ESNext", "DOM"],
     "outDir": "dist"
   },
   "include": ["*.js"],
