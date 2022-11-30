@@ -11,6 +11,7 @@
 - [CSDN](https://www.csdn.net/)
 - [知乎](https://www.zhihu.com)
 - [Bing](https://www.bing.com)
+- [简书](https://www.jianshu.com)
 
 ## 原理
 

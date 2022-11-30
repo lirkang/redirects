@@ -1,7 +1,7 @@
 /**
  * @Author likan
  * @Date 2022-11-27 11:32:59
- * @Filepath redirect/index.js
+ * @Filepath redirects/index.js
  */
 
 /** @typedef {{match: string | Array<string>, selectors: { removes: Array<string>, hides: Array<string>, parents: Array<string>, css: { [k: string]: Array<string> } }, onload?: () => void, runner?: () => void }} Site  */
@@ -34,11 +34,11 @@
   /** @type {Array<Site>} */
   const sites = [
     {
-      match: ['https://www.bing.com'],
+      match: ['https://www.bing.com', 'https://cn.bing.com'],
       selectors: {
         css: {},
         hides: [],
-        parents: ['#b_opalpers', '#bingApp_area'],
+        parents: ['#b_opalpers', '#bingApp_area', '.pagereco_anim'],
         removes: [
           '.b_ad',
           '.b_adTop',
@@ -79,20 +79,30 @@
       },
     },
     {
-      match: ['https://blog.csdn.net', 'https://csdnnews.blog.csdn.net', 'https://www.csdn.net'],
+      match: ['https://blog.csdn.net', 'https://csdnnews.blog.csdn.net', 'https://www.csdn.net', 'https://so.csdn.net'],
       runner() {
         $('#article_content a').each(function () {
           $(this).attr('target', '_blank');
           this.removeEventListener('click', csdnEventHandler, options);
           this.addEventListener('click', csdnEventHandler, options);
         });
+
+        $('.hide-preCode-bt').trigger('click');
+      },
+      onload() {
+        $('body').attr('style', 'background: #eeed !important');
       },
       selectors: {
         css: {
           'main, .blog-content': ['width', '100%'],
+          '.blog-tags-box': ['padding-left', '12px'],
+          'code *': ['user-select', 'text'],
+          '.container, main': ['margin', '0', 'border-radius', '4px'],
+          '.main-lt.blog': ['width', '100%'],
         },
-        hides: [],
+        hides: ['div:has(.picture-ad)'],
         removes: [
+          '.icon-fire',
           '.blog_container_aside',
           '.template-box',
           '.blog-footer-bottom',
@@ -107,8 +117,15 @@
           '[classs="blog-top-banner"]',
           '.toolbar-menus',
           '.toolbar-container-right',
+          '.article-type-img',
+          '.operating',
+          '#blogHuaweiyunAdvert',
+          '.hljs-button.signin',
+          '.main-rt',
+          '.so-fixed-menus',
+          '.recommend-right',
         ],
-        parents: ['.csdn-side-toolbar', '.picture-ad'],
+        parents: ['.csdn-side-toolbar'],
       },
     },
     {
@@ -262,8 +279,18 @@
         parents: ['.ad-floor-cover', '.download-entry'],
       },
     },
+    {
+      match: 'https://www.jianshu.com',
+      selectors: {
+        css: {},
+        hides: ['.adModule', 'aside', 'footer', '.aside'],
+        parents: [],
+        removes: ['#indexCarousel', '.self-flow-ad', '#menu > div', '[aria-label="baidu-ad"]'],
+      },
+    },
   ];
 
+  /** @type {Array<{ title: string, rules: RegExp, target: (query: string) => string, key: string }>} */
   const websites = [
     {
       title: 'Bing',

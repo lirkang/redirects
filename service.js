@@ -1,7 +1,7 @@
 /**
  * @Author likan
  * @Date 2022-11-27 15:34:11
- * @Filepath redirect/service.js
+ * @Filepath redirects/service.js
  */
 
 /**
